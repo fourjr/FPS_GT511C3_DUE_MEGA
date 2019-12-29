@@ -91,7 +91,7 @@ class Response_Packet
 				enum Errors_Enum
 				{
 					NO_ERROR					= 0x0000,	// Default value. no error
-					NACK_TIMEOUT				= 0x1001,	// Obsolete, capture timeout
+					NACK_TIMEOUT				= 0x1001,	// Capture timeout
 					NACK_INVALID_BAUDRATE		= 0x1002,	// Obsolete, Invalid serial baud rate
 					NACK_INVALID_POS			= 0x1003,	// The specified ID is not between 0~199
 					NACK_IS_NOT_USED			= 0x1004,	// The specified ID is not used
@@ -114,6 +114,7 @@ class Response_Packet
 
 				static Errors_Enum ParseFromBytes(byte high, byte low);
 		};
+		Response_Packet(int error);
 		Response_Packet(byte* buffer, bool UseSerialDebug);
 		ErrorCodes::Errors_Enum Error;
 		byte RawBytes[12];
@@ -161,6 +162,8 @@ class FPS_GT511C3
  public:
 	// Enables verbose debug output using hardware Serial 
 	bool UseSerialDebug;
+	// Returns value of LED
+	bool led = false;
 
 	#pragma region -= Constructor/Destructor =-
 	// Creates a new object to interface with the fingerprint scanner
