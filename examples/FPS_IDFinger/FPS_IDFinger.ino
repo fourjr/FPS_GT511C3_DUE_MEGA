@@ -1,4 +1,4 @@
-/* 
+/*
 	FPS_Enroll.ino - Library example for controlling the GT-511C3 Finger Print Scanner (FPS)
 	Created by Josh Hawley, July 23rd 2013
 	Licensed for non-commercial use, must include this license message
@@ -21,22 +21,21 @@ FPS_GT511C3 fps(19, 18);
 void setup()
 {
 	Serial.begin(9600);
-  Serial1.begin(9600);
+	Serial1.begin(9600);
 	delay(100);
 	fps.Open();
 	fps.SetLED(true);
-  fps.DeleteAll();
-  Serial.println("Insira a digital");
+	Serial.println("Scan finger");
 }
 
-void loop(){
-  if (Serial1.available()>0){
+void loop()
+{
 	// Identify fingerprint test
 	if (fps.IsPressFinger())
 	{
 		fps.CaptureFinger(false);
 		int id = fps.Identify1_N();
-		if (id <20)
+		if (id < 20)
 		{
 			Serial.print("Verified ID:");
 			Serial.println(id);
@@ -51,5 +50,4 @@ void loop(){
 		Serial.println("Please press finger");
 	}
 	delay(200);
-  }
 }

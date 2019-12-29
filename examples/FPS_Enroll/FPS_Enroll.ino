@@ -6,7 +6,6 @@
 	TLDR; Wil Wheaton's Law
 */
 
-
 #include "FPS_GT511C3.h"
 //#include "SoftwareSerial.h"
 
@@ -20,13 +19,12 @@ FPS_GT511C3 fps(19, 18);
 void setup()
 {
 	Serial.begin(9600);
-  Serial1.begin(9600);
+	Serial1.begin(9600);
 	delay(100);
 	fps.Open();
 	fps.SetLED(true);
 	Enroll();
 }
-
 
 void Enroll()
 {
@@ -38,31 +36,37 @@ void Enroll()
 	while (usedid == true)
 	{
 		usedid = fps.CheckEnrolled(enrollid);
-		if (usedid==true) enrollid++;
+		if (usedid == true)
+			enrollid++;
 	}
 	fps.EnrollStart(enrollid);
 
 	// enroll
 	Serial.print("Press finger to Enroll #");
 	Serial.println(enrollid);
-	while(fps.IsPressFinger() == false) delay(100);
+	while (fps.IsPressFinger() == false)
+		delay(100);
 	bool bret = fps.CaptureFinger(true);
 	int iret = 0;
 	if (bret != false)
 	{
 		Serial.println("Remove finger");
-		fps.Enroll1(); 
-		while(fps.IsPressFinger() == true) delay(100);
+		fps.Enroll1();
+		while (fps.IsPressFinger() == true)
+			delay(100);
 		Serial.println("Press same finger again");
-		while(fps.IsPressFinger() == false) delay(100);
+		while (fps.IsPressFinger() == false)
+			delay(100);
 		bret = fps.CaptureFinger(true);
 		if (bret != false)
 		{
 			Serial.println("Remove finger");
 			fps.Enroll2();
-			while(fps.IsPressFinger() == true) delay(100);
+			while (fps.IsPressFinger() == true)
+				delay(100);
 			Serial.println("Press same finger yet again");
-			while(fps.IsPressFinger() == false) delay(100);
+			while (fps.IsPressFinger() == false)
+				delay(100);
 			bret = fps.CaptureFinger(true);
 			if (bret != false)
 			{
@@ -78,15 +82,17 @@ void Enroll()
 					Serial.println(iret);
 				}
 			}
-			else Serial.println("Failed to capture third finger");
+			else
+				Serial.println("Failed to capture third finger");
 		}
-		else Serial.println("Failed to capture second finger");
+		else
+			Serial.println("Failed to capture second finger");
 	}
-	else Serial.println("Failed to capture first finger");
+	else
+		Serial.println("Failed to capture first finger");
 }
-
 
 void loop()
 {
-  delay(100000);
+	delay(100000);
 }

@@ -213,14 +213,23 @@ FPS_GT511C3::FPS_GT511C3(uint8_t rx, uint8_t tx)
 {
 	pin_RX = rx;
 	pin_TX = tx;
-	Serial3.begin(9600);
+	if (rx == 19 && tx == 18) {
+		this->serial = &Serial1;
+	}
+	else if (rx == 17 && tx == 16) {
+		this->serial = &Serial2;
+	}
+	else if (rx == 14 && tx == 15) {
+		this->serial = &Serial3;
+	}
+
+	this->serial->begin(9600);
 	this->UseSerialDebug = false;
 };
 
 // destructor
 FPS_GT511C3::~FPS_GT511C3()
 {
-	//Serial3.~SoftwareSerial();
 }
 #pragma endregion
 
@@ -325,8 +334,8 @@ bool FPS_GT511C3::ChangeBaudRate(int baud)
 		bool retval = rp->ACK;
 		if (retval)
 		{
-			Serial3.end();
-			Serial3.begin(baud);
+			this->serial->end();
+			this->serial->begin(baud);
 		}
 		delete rp;
 		delete packetbytes;
@@ -720,7 +729,7 @@ bool FPS_GT511C3::CaptureFinger(bool highquality)
 // Sends the command to the software serial channel
 void FPS_GT511C3::SendCommand(byte cmd[], int length)
 {
-	Serial3.write(cmd, length);
+	this->serial->write(cmd, length);
 	delay(50);
 	if (UseSerialDebug)
 	{
@@ -735,11 +744,11 @@ Response_Packet* FPS_GT511C3::GetResponse()
 {
 	byte firstbyte = 0;
 	bool done = false;
-	//Serial3.listen();
+	//this->serial->listen();
 	if (UseSerialDebug) Serial.print("FPS - GetResponse");
 	while (done == false)
 	{
-		firstbyte = (byte)Serial3.read();
+		firstbyte = (byte)this->serial->read();
 		if (firstbyte == Response_Packet::COMMAND_START_CODE_1)
 		{
 			done = true;
@@ -750,8 +759,8 @@ Response_Packet* FPS_GT511C3::GetResponse()
 	resp[0] = firstbyte;
 	for (int i=1; i < 12; i++)
 	{
-		while (Serial3.available() == false) delay(10);
-		resp[i]= (byte) Serial3.read();
+		while (this->serial->available() == false) delay(10);
+		resp[i]= (byte) this->serial->read();
 	}
 	Response_Packet* rp = new Response_Packet(resp, UseSerialDebug);
 	delete resp;

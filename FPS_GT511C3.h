@@ -10,7 +10,7 @@
 #define FPS_GT511C3_h
 
 #include "Arduino.h"
-//#include "SoftwareSerial.h"
+#include "HardwareSerial.h"
 #pragma region -= Command_Packet =-
 /*
 	Command_Packet represents the 12 byte command that we send to the finger print scanner
@@ -160,6 +160,7 @@ class FPS_GT511C3
 {
  
  public:
+	HardwareSerial serial;
 	// Enables verbose debug output using hardware Serial 
 	bool UseSerialDebug;
 	// Returns value of LED

@@ -21,18 +21,17 @@ FPS_GT511C3 fps(19, 18);
 
 void setup()
 {
-  Serial.begin(9600);
+	Serial.begin(9600);
 	Serial1.begin(9600);
 	fps.UseSerialDebug = true; // so you can see the messages in the serial debug screen
 	fps.Open();
 }
-
 
 void loop()
 {
 	// FPS Blink LED Test
 	fps.SetLED(true); // turn on the LED inside the fps
 	delay(1000);
-	fps.SetLED(false);// turn off the LED inside the fps
+	fps.SetLED(false); // turn off the LED inside the fps
 	delay(1000);
 }
